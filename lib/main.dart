@@ -125,8 +125,8 @@ class _OthelloBoardState extends State<OthelloBoard> {
         color: piece == 1 ? Colors.black : Colors.white, // 石の色を設定
         shape: BoxShape.circle, // 石の形を丸に設定
       ),
-      width: 55.0, // 石の幅
-      height: 55.0, // 石の高さ
+      width: 80.0, // 石の幅
+      height: 80.0, // 石の高さ
     );
   }
 
