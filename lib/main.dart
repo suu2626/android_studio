@@ -11,11 +11,11 @@ class OthelloGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Othello Game', // タイトル
+      title: 'Othello Game',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const OthelloBoard(), // ホーム画面
+      home: const OthelloBoard(),
     );
   }
 }
@@ -130,27 +130,44 @@ class _OthelloBoardState extends State<OthelloBoard> {
     );
   }
 
+  // 現在のプレイヤーを表示するウィジェット
+  Widget _buildCurrentPlayerText() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        currentPlayer == 1 ? '黒の番です' : '白の番です',
+        style: const TextStyle(fontSize: 20),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Othello Game'),
       ),
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: 1.0, // 正方形のボードを保持
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: boardSize, // ボードの列数
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _buildCurrentPlayerText(), // 現在のプレイヤーを表示
+          Flexible(
+            child: AspectRatio(
+              aspectRatio: 1.0, // 正方形のボードを保持
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: boardSize, // ボードの列数
+                ),
+                itemBuilder: (context, index) {
+                  int x = index ~/ boardSize;
+                  int y = index % boardSize;
+                  return _buildCell(x, y); // セルを構築
+                },
+                itemCount: boardSize * boardSize, // セルの総数
+              ),
             ),
-            itemBuilder: (context, index) {
-              int x = index ~/ boardSize;
-              int y = index % boardSize;
-              return _buildCell(x, y); // セルを構築
-            },
-            itemCount: boardSize * boardSize, // セルの総数
           ),
-        ),
+        ],
       ),
     );
   }
