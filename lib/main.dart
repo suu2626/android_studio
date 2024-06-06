@@ -192,43 +192,49 @@ class _OthelloBoardState extends State<OthelloBoard> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
-        currentPlayer == 1 ? '黒の番です' : '白の番です',
+        currentPlayer == 1 ? '黒(くろ)の番です' : '白(しろ)の番です',
         style: const TextStyle(fontSize: 20),
       ),
     );
   }
 
-  // 石の数を表示するウィジェットとリセットボタンを横並びに表示
-  Widget _buildPieceCountAndResetButton() {
+  // 石の数を表示するウィジェット
+  Widget _buildPieceCount() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '黒: $blackCount  白: $whiteCount',
+            '黒(くろ): $blackCount  白(しろ): $whiteCount',
             style: const TextStyle(fontSize: 20),
           ),
-          const SizedBox(width: 20),
-          if (isGameOver)
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  board = List.generate(
-                      boardSize, (_) => List.filled(boardSize, 0));
-                  _initializeBoard();
-                  _countPieces();
-                });
-              },
-              // リセットボタンのスタイルをカスタマイズ。ボタンのパディング、フォントサイズを設定
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0, vertical: 15.0),
-                textStyle: const TextStyle(fontSize: 20),
-              ),
-              child: const Text('リセット'),
-            ),
         ],
+      ),
+    );
+  }
+
+// リセットボタンを表示するウィジェット
+  Widget _buildResetButton() {
+    if (!isGameOver) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            board = List.generate(boardSize, (_) => List.filled(boardSize, 0));
+            _initializeBoard();
+            _countPieces();
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
+          textStyle: const TextStyle(fontSize: 20),
+        ),
+        child: const Text(
+          'リセット',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
       ),
     );
   }
@@ -237,13 +243,13 @@ class _OthelloBoardState extends State<OthelloBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Othello Game'),
+        title: const Text('オセロ'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           _buildCurrentPlayerText(), // 現在のプレイヤーを表示
-          _buildPieceCountAndResetButton(), // 石の数とリセットボタンを表示
+          _buildPieceCount(), // 石の数を表示
           Flexible(
             child: AspectRatio(
               aspectRatio: 1.0, // 正方形のボードを保持
@@ -260,6 +266,7 @@ class _OthelloBoardState extends State<OthelloBoard> {
               ),
             ),
           ),
+          _buildResetButton(), // リセットボタンを表示
         ],
       ),
     );
